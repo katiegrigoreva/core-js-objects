@@ -254,8 +254,16 @@ function fromJSON(proto, json) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  const sortByKey = (keyName, keyName2) => {
+    return (a, b) => {
+      if (a[keyName] === b[keyName]) {
+        return a[keyName2] > b[keyName2] ? 1 : -1;
+      }
+      return a[keyName] > b[keyName] ? 1 : -1;
+    };
+  };
+  return arr.sort(sortByKey('country', 'city'));
 }
 
 /**
@@ -288,8 +296,22 @@ function sortCitiesArray(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const set = new Set();
+  const map = new Map();
+  array.forEach((obj) => {
+    set.add(keySelector(obj));
+  });
+  set.forEach((key) => {
+    const valueArr = [];
+    array.forEach((obj) => {
+      if (key === keySelector(obj)) {
+        valueArr.push(valueSelector(obj));
+        map.set(keySelector(obj), valueArr);
+      }
+    });
+  });
+  return map;
 }
 
 /**
